@@ -38,7 +38,7 @@ I am deploying this with `kata`, a Docker-based service manager I wrote, but any
 ## Running Locally
 
 ```bash
-git clone https://github.com/rcarmo/python-fastapi-trmnl-server.git
+git clone https://github.com/usetrmnl/byos_fastapi.git
 cd trmnlServer
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
