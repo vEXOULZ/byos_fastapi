@@ -1,4 +1,5 @@
 import asyncio
+import os
 from typing import Any, Dict, List
 
 import httpx
@@ -9,6 +10,10 @@ import logging
 from .. import config
 
 logger = logging.getLogger(__name__)
+
+# Default: Lisbon, Portugal
+DEFAULT_LATITUDE = float(os.getenv('WEATHER_LATITUDE', 38.7223))
+DEFAULT_LONGITUDE = float(os.getenv('WEATHER_LONGITUDE', -9.1393))
 
 class WeatherPlugin(PluginBase):
     """
@@ -39,8 +44,8 @@ class WeatherPlugin(PluginBase):
         Fetch weather and generate Braun-inspired black and white image.
         kwargs can contain 'latitude' and 'longitude'.
         """
-        lat = kwargs.get('latitude', 38.7223) # Default: Lisbon, Portugal
-        lon = kwargs.get('longitude', -9.1393)
+        lat = kwargs.get('latitude', DEFAULT_LATITUDE)
+        lon = kwargs.get('longitude', DEFAULT_LONGITUDE)
         output_dir = kwargs.get('output_dir', config.ASSETS_ROOT)
         
         logger.info(f"Running WeatherPlugin for lat={lat}, lon={lon}")
