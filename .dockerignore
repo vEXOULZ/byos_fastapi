@@ -1,0 +1,15 @@
+.git
+.github
+.vscode
+docs
+var
+venv
+**/__pycache__
+**/*.pyc
+.pytest_cache
+.coverage
+*.db
+kata-compose.yaml
+docker-compose.yml
+docker-compose.override.yml
+.env
