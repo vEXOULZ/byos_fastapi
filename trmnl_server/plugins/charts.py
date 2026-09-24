@@ -4,6 +4,7 @@ from typing import List, Sequence, Tuple
 import httpx
 
 from .base import ChartPlugin
+from .. import config
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +36,7 @@ async def _fetch_series(url: str) -> List[Tuple[str, int]]:
 class PageviewsPlugin(ChartPlugin):
     """Render hourly pageviews chart."""
 
+    AUTO_REGISTER = config.CHART_PLUGINS_ENABLED
     DISPLAY_NAME = "Web Stats - Pageviews"
     SERIES_LABEL = "Pageviews"
     BASENAME = "webstats_pageviews"
@@ -51,6 +53,7 @@ class PageviewsPlugin(ChartPlugin):
 class VisitorsPlugin(ChartPlugin):
     """Render hourly visitors chart."""
 
+    AUTO_REGISTER = config.CHART_PLUGINS_ENABLED
     DISPLAY_NAME = "Web Stats - Visitors"
     SERIES_LABEL = "Visitors"
     BASENAME = "webstats_visitors"
@@ -67,6 +70,7 @@ class VisitorsPlugin(ChartPlugin):
 class TotalPowerPlugin(ChartPlugin):
     """Render the total power chart from the local power feed."""
 
+    AUTO_REGISTER = config.CHART_PLUGINS_ENABLED
     DISPLAY_NAME = "Power - Total"
     SERIES_LABEL = "Total Power (W)"
     BASENAME = "power_total"

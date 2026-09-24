@@ -58,6 +58,12 @@ PHOTO_GRADING_ENABLED = True
 # no calibration assets are generated.
 CALIBRATION_PLUGIN_ENABLED = False
 
+# Chart plugin control
+#
+# The chart plugins poll a Node-RED instance at a fixed LAN address. When
+# disabled, they are excluded from the plugin registry.
+CHART_PLUGINS_ENABLED = False
+
 # E-ink grayscale response compensation
 #
 # These settings allow quantization and dithering to operate in a non-linear
@@ -132,7 +138,7 @@ def _apply_environment_overrides() -> None:
     global DITHERING_MODE, ASSETS_ROOT, STATIC_ROOT, GENERATED_ROOT
     global PNG_MAX_BYTES
     global EINK_TONE_POINTS, EINK_TONE_GAMMA
-    global PHOTO_GRADING_ENABLED, CALIBRATION_PLUGIN_ENABLED
+    global PHOTO_GRADING_ENABLED, CALIBRATION_PLUGIN_ENABLED, CHART_PLUGINS_ENABLED
     _ENV_OVERRIDES.clear()
 
     default_eink_tone_points = EINK_TONE_POINTS
@@ -157,6 +163,7 @@ def _apply_environment_overrides() -> None:
     EINK_TONE_GAMMA = _env_float('EINK_TONE_GAMMA', default_eink_tone_gamma, 'eink_tone_gamma')
     PHOTO_GRADING_ENABLED = _env_bool('PHOTO_GRADING_ENABLED', PHOTO_GRADING_ENABLED, 'photo_grading_enabled')
     CALIBRATION_PLUGIN_ENABLED = _env_bool('CALIBRATION_PLUGIN_ENABLED', CALIBRATION_PLUGIN_ENABLED, 'calibration_plugin_enabled')
+    CHART_PLUGINS_ENABLED = _env_bool('CHART_PLUGINS_ENABLED', CHART_PLUGINS_ENABLED, 'chart_plugins_enabled')
     _refresh_server_scheme()
 
 
