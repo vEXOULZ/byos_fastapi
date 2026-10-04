@@ -66,6 +66,11 @@ All settings come from environment variables:
 - `EINK_TONE_POINTS`, `EINK_TONE_GAMMA` – optional grayscale response compensation points/gamma for panel-space quantization.
 - `BATTERY_MAX_VOLTAGE`, `BATTERY_MIN_VOLTAGE`, `TIME_ZONE` – telemetry scaling.
 - `SETUP_API_KEY`, `SETUP_FRIENDLY_ID`, `SETUP_MESSAGE` – `/api/setup` payload fields.
+
+Any of them can instead be read from a file: set `FILE__<NAME>` to its path, e.g.
+`FILE__SETUP_API_KEY=/run/secrets/setup_api_key` for a docker secret (the same
+convention as linuxserver.io images). `FILE__<NAME>` wins when both are set, and one
+trailing newline is dropped. `SETUP_API_KEY` is never written to the log.
 - `ASSETS_ROOT`, `STATIC_ROOT`, `GENERATED_ROOT` – relative directories (inside the working dir) for dashboard assets and generated BMP/PNG output (defaults: `web`, `web`, and `var/generated`).
 - `CALIBRATION_PLUGIN_ENABLED` – set to `false` to remove calibration plugins from the registry and skip generating calibration assets.
 
