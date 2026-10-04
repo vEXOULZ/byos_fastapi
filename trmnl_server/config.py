@@ -87,9 +87,35 @@ WEB_GENERATED_DIR = join(CONFIG_DIR, GENERATED_ROOT)
 
 _ENV_OVERRIDES: set[str] = set()
 
+# Config keys whose values are never written to the log.
+_SECRET_KEYS = {'setup_api_key'}
+
+
+def _env_value(name: str) -> str | None:
+    """Read a setting from FILE__<name> (a path to a file holding the value) or from <name>.
+
+    FILE__<name> wins when both are set, as in linuxserver.io images, so a value can
+    come from a docker secret mounted at /run/secrets/... instead of the environment.
+    One trailing newline is dropped. An unreadable file is logged and ignored.
+    """
+    path = environ.get(f'FILE__{name}')
+    if path is not None:
+        try:
+            with open(path, encoding='utf-8') as handle:
+                value = handle.read()
+        except OSError as exc:
+            logger.warning('[Config] Cannot read FILE__%s (%s): %s', name, path, exc.strerror)
+        else:
+            if value.endswith('\n'):
+                value = value[:-1]
+            if value.endswith('\r'):
+                value = value[:-1]
+            return value
+    return environ.get(name)
+
 
 def _env_str(name: str, default: str, config_key: str) -> str:
-    value = environ.get(name)
+    value = _env_value(name)
     if value is None:
         return default
     _ENV_OVERRIDES.add(config_key)
@@ -97,7 +123,7 @@ def _env_str(name: str, default: str, config_key: str) -> str:
 
 
 def _env_bool(name: str, default: bool, config_key: str) -> bool:
-    value = environ.get(name)
+    value = _env_value(name)
     if value is None:
         return default
     _ENV_OVERRIDES.add(config_key)
@@ -105,7 +131,7 @@ def _env_bool(name: str, default: bool, config_key: str) -> bool:
 
 
 def _env_int(name: str, default: int, config_key: str) -> int:
-    value = environ.get(name)
+    value = _env_value(name)
     if value is None:
         return default
     try:
@@ -118,7 +144,7 @@ def _env_int(name: str, default: int, config_key: str) -> int:
 
 
 def _env_float(name: str, default: float, config_key: str) -> float:
-    value = environ.get(name)
+    value = _env_value(name)
     if value is None:
         return default
     try:
@@ -217,7 +243,7 @@ def update_config(key: str, value) -> None:
     global EINK_TONE_POINTS, EINK_TONE_GAMMA
     global PHOTO_GRADING_ENABLED, CALIBRATION_PLUGIN_ENABLED
 
-    logger.info('[Config] Updating %s to %s', key, value)
+    logger.info('[Config] Updating %s to %s', key, '***' if key in _SECRET_KEYS else value)
 
     if key == 'image_path':
         IMAGE_PATH = str(value)
